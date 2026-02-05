@@ -1,0 +1,8 @@
+{
+  "name": "TradoDesk_v0.0.1",
+  "description": "Ein sicheres, KI-gestütztes Desktop-Handels-Cockpit mit integrierter Broker-Integration und Automatisierung.",
+  "requestFramePermissions": [
+    "microphone",
+    "camera"
+  ]
+}

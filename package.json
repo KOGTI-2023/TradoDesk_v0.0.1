@@ -1,0 +1,22 @@
+{
+  "name": "tradodesk-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "start": "npm run start --workspace=packages/app",
+    "build": "npm run build --workspaces",
+    "todo:sync": "ts-node tools/todo-sync.ts",
+    "lint": "eslint packages/**/*.{ts,tsx}",
+    "format": "prettier --write packages/**/*.{ts,tsx}",
+    "typecheck": "tsc --build"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.0",
+    "ts-node": "^10.9.1",
+    "eslint": "^8.56.0",
+    "prettier": "^3.2.0"
+  }
+}

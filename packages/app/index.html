@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TradoDesk</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      #boot-error-trap {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-color: #450a0a;
+        color: #f87171;
+        z-index: 99999;
+        padding: 40px;
+        font-family: monospace;
+        overflow: auto;
+      }
+      #boot-error-trap h1 { font-size: 24px; margin-bottom: 20px; color: white; }
+      #boot-error-trap pre { background: rgba(0,0,0,0.5); padding: 20px; border: 1px solid #7f1d1d; white-space: pre-wrap; }
+    </style>
+    <script>
+        // Polyfill process for browser/preview environment
+        window.process = window.process || { env: { NODE_ENV: 'development' } };
+        window.global = window;
+
+        window.onerror = function(msg, url, line, col, error) {
+            const trap = document.getElementById('boot-error-trap');
+            const content = document.getElementById('boot-error-content');
+            if (trap && content) {
+                trap.style.display = 'block';
+                content.innerText += `[CRITICAL ERROR] ${msg}\nLocation: ${url}:${line}:${col}\nStack: ${error?.stack || 'N/A'}\n\n`;
+            }
+            return false; 
+        };
+        window.addEventListener('unhandledrejection', function(event) {
+            const trap = document.getElementById('boot-error-trap');
+            const content = document.getElementById('boot-error-content');
+            if (trap && content) {
+                trap.style.display = 'block';
+                content.innerText += `[UNHANDLED PROMISE] ${event.reason}\n\n`;
+            }
+        });
+    </script>
+  </head>
+  <body class="bg-slate-950 text-slate-200 overflow-hidden">
+    <div id="boot-error-trap">
+        <h1>TradoDesk Boot Failure</h1>
+        <p>Das System konnte nicht gestartet werden.</p>
+        <pre id="boot-error-content"></pre>
+        <button onclick="location.reload()" class="mt-4 px-4 py-2 bg-slate-700 text-white rounded hover:bg-slate-600">Reload</button>
+    </div>
+
+    <div id="root">
+        <div class="flex items-center justify-center h-screen text-slate-500 animate-pulse">
+            Loading TradoDesk (App)...
+        </div>
+    </div>
+    
+    <div id="diagnostics-root"></div>
+    
+    <!-- FIX: Use relative path ./src/main.tsx instead of /src/main.tsx for subpath compatibility -->
+    <script type="module" src="./src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TradoDesk</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Critical Error Overlay - Pure CSS/HTML */
+      #boot-error-trap {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-color: #450a0a; /* Red 950 */
+        color: #f87171; /* Red 400 */
+        z-index: 99999;
+        padding: 40px;
+        font-family: monospace;
+        overflow: auto;
+      }
+      #boot-error-trap h1 { font-size: 24px; margin-bottom: 20px; color: white; }
+      #boot-error-trap pre { background: rgba(0,0,0,0.5); padding: 20px; border: 1px solid #7f1d1d; white-space: pre-wrap; }
+    </style>
+    <script>
+        // Polyfill process for Web Preview
+        window.process = window.process || { env: { NODE_ENV: 'development' } };
+        window.global = window;
+
+        // Global Error Trap
+        window.onerror = function(msg, url, line, col, error) {
+            const trap = document.getElementById('boot-error-trap');
+            const content = document.getElementById('boot-error-content');
+            if (trap && content) {
+                trap.style.display = 'block';
+                content.innerText += `[CRITICAL ERROR] ${msg}\nLocation: ${url}:${line}:${col}\nStack: ${error?.stack || 'N/A'}\n\n`;
+            }
+            return false; 
+        };
+        window.addEventListener('unhandledrejection', function(event) {
+            const trap = document.getElementById('boot-error-trap');
+            const content = document.getElementById('boot-error-content');
+            if (trap && content) {
+                trap.style.display = 'block';
+                content.innerText += `[UNHANDLED PROMISE] ${event.reason}\n\n`;
+            }
+        });
+    </script>
+    <script type="importmap">
+{
+  "imports": {
+    "playwright": "https://esm.sh/playwright@^1.58.1",
+    "vite": "https://esm.sh/vite@^7.3.1",
+    "vite-plugin-electron": "https://esm.sh/vite-plugin-electron@^0.29.0",
+    "vite-plugin-electron-renderer": "https://esm.sh/vite-plugin-electron-renderer@^0.14.6",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.3",
+    "path": "https://esm.sh/path@^0.12.7",
+    "url": "https://esm.sh/url@^0.11.4",
+    "electron": "https://esm.sh/electron@^40.1.0",
+    "fs": "https://esm.sh/fs@^0.0.1-security",
+    "os": "https://esm.sh/os@^0.1.2",
+    "crypto": "https://esm.sh/crypto@^1.0.1",
+    "buffer": "https://esm.sh/buffer@^6.0.3",
+    "react": "https://esm.sh/react@^18.2.0",
+    "react-dom": "https://esm.sh/react-dom@^18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@^18.2.0/client",
+    "@google/genai": "https://esm.sh/@google/genai@^0.1.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.330.0",
+    "recharts": "https://esm.sh/recharts@^2.12.0",
+    "zustand": "https://esm.sh/zustand@^4.5.0",
+    "clsx": "https://esm.sh/clsx@^2.1.0",
+    "tailwind-merge": "https://esm.sh/tailwind-merge@^2.2.1",
+    "@tradodesk/shared/": "./packages/shared/",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "zod": "https://esm.sh/zod@^4.3.6"
+  }
+}
+</script>
+  </head>
+  <body class="bg-slate-950 text-slate-200 overflow-hidden">
+    <!-- Boot Error Trap UI -->
+    <div id="boot-error-trap">
+        <h1>TradoDesk Boot Failure</h1>
+        <p>Das System konnte nicht gestartet werden. Bitte screenshotten Sie diesen Fehler.</p>
+        <pre id="boot-error-content"></pre>
+        <button onclick="location.reload()" class="mt-4 px-4 py-2 bg-slate-700 text-white rounded hover:bg-slate-600">Reload</button>
+    </div>
+
+    <!-- React Root -->
+    <div id="root">
+        <div class="flex items-center justify-center h-screen text-slate-500 animate-pulse">
+            Loading TradoDesk...
+        </div>
+    </div>
+    
+    <div id="diagnostics-root"></div>
+    
+    <!-- Entry Point: relative path to package source -->
+    <script type="module" src="./packages/app/src/main.tsx"></script>
+  </body>
+</html>

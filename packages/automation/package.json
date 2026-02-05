@@ -1,0 +1,9 @@
+{
+  "name": "@tradodesk/automation",
+  "version": "1.0.0",
+  "main": "src/runner.ts",
+  "dependencies": {
+    "playwright": "^1.41.0",
+    "@tradodesk/shared": "1.0.0"
+  }
+}
